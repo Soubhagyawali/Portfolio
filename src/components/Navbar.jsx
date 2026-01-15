@@ -12,7 +12,6 @@ const Navbar = () => {
     { id: 'about', icon: UserIcon, label: 'About' },
     { id: 'skills', icon: BriefcaseIcon, label: 'Skills' },
     { id: 'education', icon: AcademicCapIcon, label: 'Education' },
-    { id: 'experience', icon: BriefcaseIcon, label: 'Experience' },
     { id: 'projects', icon: RocketLaunchIcon, label: 'Projects' },
     { id: 'contact', icon: EnvelopeIcon, label: 'Contact' },
   ];

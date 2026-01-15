@@ -4,8 +4,13 @@ import {
     RocketLaunchIcon,
     GlobeAltIcon,
     ArrowTopRightOnSquareIcon,
-    PlayCircleIcon,
+    PhotoIcon,
 } from '@heroicons/react/24/outline';
+
+// Project preview images
+import javafoodsPreview from '../assets/images/javafoods-preview.png';
+import emailAssistantPreview from '../assets/images/email-assistant-preview.png';
+import portfolioPreview from '../assets/images/portfolio-preview.png';
 
 const Projects = () => {
     const projects = [
@@ -21,7 +26,7 @@ const Projects = () => {
             bgGradient: 'from-orange-500/10 to-red-500/10',
             githubUrl: 'https://github.com/Soubhagyawali/JavaFoods',
             demoUrl: '#',
-            videoUrl: '/videos/javafoods-demo.mp4',
+            imageUrl: javafoodsPreview,
         },
         {
             id: 2,
@@ -35,7 +40,7 @@ const Projects = () => {
             bgGradient: 'from-purple-500/10 to-pink-500/10',
             githubUrl: 'https://github.com/Soubhagyawali/Email-Assistant',
             demoUrl: '#',
-            videoUrl: '/videos/email-assistant-demo.mp4',
+            imageUrl: emailAssistantPreview,
         },
         {
             id: 3,
@@ -49,7 +54,7 @@ const Projects = () => {
             bgGradient: 'from-blue-500/10 to-cyan-500/10',
             githubUrl: 'https://github.com/Soubhagyawali/Portfolio',
             demoUrl: '#',
-            videoUrl: '/videos/portfolio-demo.mp4', // Add your video to public/videos/
+            imageUrl: portfolioPreview,
         },
     ];
 
@@ -120,33 +125,18 @@ const Projects = () => {
                                     className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-500`}
                                 />
 
-                                {/* Video Container */}
-                                <div className="relative w-full aspect-video bg-gray-800/80 overflow-hidden group/video">
-                                    {project.videoUrl ? (
-                                        <video
-                                            className="w-full h-full object-cover"
-                                            muted
-                                            loop
-                                            playsInline
-                                            onMouseEnter={(e) => e.target.play()}
-                                            onMouseLeave={(e) => {
-                                                e.target.pause();
-                                                e.target.currentTime = 0;
-                                            }}
-                                        >
-                                            <source src={project.videoUrl} type="video/mp4" />
-                                            Your browser does not support the video tag.
-                                        </video>
+                                {/* Image Container */}
+                                <div className="relative w-full aspect-video bg-gray-800/80 overflow-hidden group/image">
+                                    {project.imageUrl ? (
+                                        <img
+                                            src={project.imageUrl}
+                                            alt={`${project.title} Preview`}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
+                                        />
                                     ) : (
                                         <div className="w-full h-full flex flex-col items-center justify-center">
-                                            <PlayCircleIcon className={`w-16 h-16 text-gray-600 group-hover:text-gray-500 transition-colors`} />
-                                            <p className="text-gray-500 text-sm mt-2">Demo video coming soon</p>
-                                        </div>
-                                    )}
-                                    {/* Play Hint Overlay */}
-                                    {project.videoUrl && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-100 group-hover/video:opacity-0 transition-opacity duration-300 pointer-events-none">
-                                            <PlayCircleIcon className="w-12 h-12 text-white/80" />
+                                            <PhotoIcon className={`w-16 h-16 text-gray-600 group-hover:text-gray-500 transition-colors`} />
+                                            <p className="text-gray-500 text-sm mt-2">Preview coming soon</p>
                                         </div>
                                     )}
                                     {/* Gradient Overlay */}
