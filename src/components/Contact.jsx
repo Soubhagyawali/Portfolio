@@ -5,26 +5,54 @@ import {
   PaperAirplaneIcon,
   ChatBubbleLeftRightIcon,
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const form = useRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-  };
+    setIsSubmitting(true);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    emailjs
+      .sendForm(
+        'service_i55vxv4',
+        'template_o6yfn9f',
+        form.current,
+        'JDqsyFVJvyKT95TOf'
+      )
+      .then(
+        () => {
+          form.current.reset();
+          setIsSubmitting(false);
+          toast.success('Message sent successfully! ✅', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'dark',
+          });
+        },
+        (error) => {
+          console.error('Error sending message:', error);
+          setIsSubmitting(false);
+          toast.error('Failed to send message. Please try again.', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'dark',
+          });
+        }
+      );
   };
 
   return (
@@ -32,6 +60,9 @@ const Contact = () => {
       id="contact"
       className="min-h-screen bg-gray-900 py-20 flex items-center justify-center relative overflow-hidden"
     >
+      {/* Toast Container */}
+      <ToastContainer />
+
       {/* Background Glow */}
       <div className="absolute bottom-20 right-40 w-96 h-96 bg-gradient-to-br from-blue-500 to-cyan-400 blur-3xl opacity-20 rounded-full" />
 
@@ -63,7 +94,7 @@ const Contact = () => {
           transition={{ delay: 0.2 }}
           className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-gray-700/50 hover:border-cyan-500/30 transition-all duration-300 shadow-xl"
         >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form ref={form} onSubmit={handleSubmit} className="space-y-5">
             {/* Name Field */}
             <div>
               <label className="text-gray-300 text-sm font-medium mb-2 block">
@@ -73,9 +104,8 @@ const Contact = () => {
                 <UserIcon className="w-5 h-5 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
+                  name="user_name"
+                  required
                   placeholder="Enter your name"
                   className="w-full bg-gray-800/70 border border-gray-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 transition-all"
                 />
@@ -91,9 +121,8 @@ const Contact = () => {
                 <EnvelopeIcon className="w-5 h-5 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  name="user_email"
+                  required
                   placeholder="Enter your email"
                   className="w-full bg-gray-800/70 border border-gray-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 transition-all"
                 />
@@ -107,8 +136,7 @@ const Contact = () => {
               </label>
               <textarea
                 name="message"
-                value={formData.message}
-                onChange={handleChange}
+                required
                 rows="5"
                 placeholder="Enter your message"
                 className="w-full bg-gray-800/70 border border-gray-700 rounded-xl py-3.5 px-4 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 transition-all resize-none"
@@ -118,12 +146,26 @@ const Contact = () => {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transition-all btn-glow"
+              disabled={isSubmitting}
+              whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+              whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
+              className={`w-full py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transition-all btn-glow ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
             >
-              <PaperAirplaneIcon className="w-5 h-5" />
-              Send Message
+              {isSubmitting ? (
+                <>
+                  <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <PaperAirplaneIcon className="w-5 h-5" />
+                  Send Message
+                </>
+              )}
             </motion.button>
           </form>
         </motion.div>

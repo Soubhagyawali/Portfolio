@@ -1,10 +1,12 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     CodeBracketIcon,
     RocketLaunchIcon,
     GlobeAltIcon,
-    ArrowTopRightOnSquareIcon,
+    PlayCircleIcon,
     PhotoIcon,
+    XMarkIcon,
 } from '@heroicons/react/24/outline';
 
 // Project preview images
@@ -12,7 +14,13 @@ import javafoodsPreview from '../assets/images/javafoods-preview.png';
 import emailAssistantPreview from '../assets/images/email-assistant-preview.png';
 import portfolioPreview from '../assets/images/portfolio-preview.png';
 
+// Project demo videos (you can add your video files here)
+import javafoodsVideo from '../assets/videos/javafoods-demo.mp4';
+//import portfolioVideo from '../assets/videos/portfolio-demo.mp4';
+
 const Projects = () => {
+    const [selectedProject, setSelectedProject] = useState(null);
+
     const projects = [
         {
             id: 1,
@@ -25,7 +33,7 @@ const Projects = () => {
             gradient: 'from-orange-500 to-red-500',
             bgGradient: 'from-orange-500/10 to-red-500/10',
             githubUrl: 'https://github.com/Soubhagyawali/JavaFoods',
-            demoUrl: '#',
+            videoUrl: javafoodsVideo,
             imageUrl: javafoodsPreview,
         },
         {
@@ -38,8 +46,8 @@ const Projects = () => {
             icon: CodeBracketIcon,
             gradient: 'from-purple-500 to-pink-500',
             bgGradient: 'from-purple-500/10 to-pink-500/10',
-            githubUrl: 'https://github.com/Soubhagyawali/Email-Assistant',
-            demoUrl: '#',
+            githubUrl: 'https://github.com/Soubhagyawali/Smart-Email-Assistant-Chrome-Extension',
+            videoUrl: null, // Add your video path here: emailAssistantVideo
             imageUrl: emailAssistantPreview,
         },
         {
@@ -53,7 +61,7 @@ const Projects = () => {
             gradient: 'from-blue-500 to-cyan-500',
             bgGradient: 'from-blue-500/10 to-cyan-500/10',
             githubUrl: 'https://github.com/Soubhagyawali/Portfolio',
-            demoUrl: '#',
+            videoUrl: null,//portfolioVideo,
             imageUrl: portfolioPreview,
         },
     ];
@@ -144,7 +152,7 @@ const Projects = () => {
                                 </div>
 
                                 {/* Card Content */}
-                                <div className="p-5">
+                                <div className="p-5 relative z-10">
                                     {/* Icon and Title Row */}
                                     <div className="flex items-center gap-3 mb-3">
                                         <div
@@ -192,17 +200,15 @@ const Projects = () => {
                                             <CodeBracketIcon className="w-4 h-4" />
                                             Code
                                         </motion.a>
-                                        <motion.a
-                                            href={project.demoUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                        <motion.button
+                                            onClick={() => setSelectedProject(project)}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r ${project.gradient} text-white text-sm font-medium rounded-lg transition-all shadow-lg hover:shadow-xl`}
+                                            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r ${project.gradient} text-white text-sm font-medium rounded-lg transition-all shadow-lg hover:shadow-xl cursor-pointer`}
                                         >
-                                            <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                                            Demo
-                                        </motion.a>
+                                            <PlayCircleIcon className="w-4 h-4" />
+                                            Preview
+                                        </motion.button>
                                     </div>
                                 </div>
                             </motion.div>
@@ -223,6 +229,90 @@ const Projects = () => {
                     </p>
                 </motion.div>
             </div>
+
+            {/* Video Modal */}
+            <AnimatePresence>
+                {selectedProject && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                        onClick={() => setSelectedProject(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                            className="relative w-full max-w-4xl bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-700"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Modal Header */}
+                            <div className={`flex items-center justify-between p-4 bg-gradient-to-r ${selectedProject.gradient} text-white`}>
+                                <div className="flex items-center gap-3">
+                                    <selectedProject.icon className="w-6 h-6" />
+                                    <div>
+                                        <h3 className="font-bold text-lg">{selectedProject.title}</h3>
+                                        <p className="text-sm opacity-90">{selectedProject.subtitle}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedProject(null)}
+                                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                                >
+                                    <XMarkIcon className="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            {/* Video Content */}
+                            <div className="aspect-video bg-gray-800 flex items-center justify-center">
+                                {selectedProject.videoUrl ? (
+                                    <video
+                                        src={selectedProject.videoUrl}
+                                        controls
+                                        autoPlay
+                                        className="w-full h-full object-contain"
+                                    >
+                                        Your browser does not support the video tag.
+                                    </video>
+                                ) : (
+                                    <div className="text-center text-gray-400">
+                                        <PlayCircleIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                                        <p className="text-lg font-medium">Video Coming Soon</p>
+                                        <p className="text-sm mt-2">Demo video will be uploaded shortly</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="p-4 bg-gray-800/50 border-t border-gray-700">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedProject.techStack.slice(0, 4).map((tech, index) => (
+                                            <span
+                                                key={index}
+                                                className="px-2 py-1 text-xs font-medium bg-gray-700 text-cyan-300 rounded-full"
+                                            >
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <a
+                                        href={selectedProject.githubUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-colors"
+                                    >
+                                        <CodeBracketIcon className="w-4 h-4" />
+                                        View Code
+                                    </a>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };

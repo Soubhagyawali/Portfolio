@@ -80,13 +80,11 @@ const About = () => {
                     <motion.div variants={itemVariants} className="space-y-6">
                         <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 hover:border-cyan-500/30 transition-all duration-300">
                             <h3 className="text-2xl font-bold text-white mb-4">
-                                Hello! I'm <span className="text-cyan-400">Soubhagya Wali</span>
+                                Hello! I'm <span className="text-cyan-400">Soubhagya</span>
                             </h3>
                             <p className="text-gray-300 leading-relaxed mb-4">
 
-                                I'm a passionate Full-Stack Developer and Computer Science student graduating in 2026. My journey in tech started with curiosity
-                                about how software shapes our daily lives, and has evolved into a deep passion for
-                                building impactful web applications.
+                                I'm a passionate Full-Stack Developer and Computer Science student graduating in 2026.
                             </p>
                             <p className="text-gray-300 leading-relaxed mb-4">
                                 I specialize in <span className="text-cyan-300">Java</span>,
@@ -104,7 +102,7 @@ const About = () => {
                         <div className="grid grid-cols-3 gap-4">
                             {[
                                 { value: '3+', label: 'Projects' },
-                                { value: '4', label: 'Certifications' },
+                                { value: '5', label: 'Certifications' },
                                 { value: '2026', label: 'Graduating' },
                             ].map((stat, index) => (
                                 <motion.div

@@ -4,12 +4,18 @@ import {
   BuildingLibraryIcon,
   ClockIcon,
   TrophyIcon,
+  ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 
 import sgbitLogo from '../assets/education/Sgbitlogo.jpeg';
 import puCollegeLogo from '../assets/education/collegelogo.jpg';
 import schoolLogo from '../assets/education/oxfordlogo.jpeg';
+
+// Certificate PDFs
+import javaNptelCert from '../assets/certificates/java-nptel.pdf';
+import algorithmsUdemyCert from '../assets/certificates/algorithms-udemy.pdf';
+import cloudComputingCert from '../assets/certificates/cloud-computing-vtu.pdf';
 
 const Education = () => {
   const educationData = [
@@ -42,29 +48,41 @@ const Education = () => {
 
   const certifications = [
     {
-      name: 'Programming in Java',
-      issuer: 'NPTEL - IIT Kharagpur',
-      year: 2024,
+      name: 'Java Full Stack Development',
+      issuer: 'Tap Academy',
+      year: 2025,
       icon: TrophyIcon,
-    },
-    {
-      name: 'Design and Analysis of Algorithms',
-      issuer: 'Udemy',
-      year: 2023,
-      icon: TrophyIcon,
+      link: null,
     },
     {
       name: 'Cloud Computing Certification',
       issuer: 'VTU Center for Online Education',
       year: 2025,
       icon: TrophyIcon,
+      link: cloudComputingCert,
+    },
+    {
+      name: 'Programming in Java',
+      issuer: 'NPTEL - IIT Kharagpur',
+      year: 2024,
+      icon: TrophyIcon,
+      link: javaNptelCert,
     },
     {
       name: 'Smart India Hackathon',
       issuer: 'Participant',
       year: 2024,
       icon: TrophyIcon,
+      link: null,
     },
+    {
+      name: 'Design and Analysis of Algorithms',
+      issuer: 'Udemy',
+      year: 2023,
+      icon: TrophyIcon,
+      link: algorithmsUdemyCert,
+    },
+
   ];
 
   return (
@@ -79,7 +97,7 @@ const Education = () => {
         {/* Title */}
         <div className="text-center mb-12">
           <AcademicCapIcon className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
             Education
           </h2>
           <p className="text-gray-300 mt-2">
@@ -140,14 +158,30 @@ const Education = () => {
         </div>
 
         {/* Certifications */}
+        <div className="text-center mb-10 mt-14">
+          <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+            Certifications
+          </h2>
+        </div>
         <div className="mt-12 space-y-4">
           {certifications.map((cert, index) => {
             const Icon = cert.icon;
+            const CardWrapper = cert.link ? motion.a : motion.div;
+            const cardProps = cert.link
+              ? {
+                href: cert.link,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+              }
+              : {};
+
             return (
-              <motion.div
+              <CardWrapper
                 key={index}
+                {...cardProps}
                 whileHover={{ scale: 1.02 }}
-                className="bg-gray-800/50 backdrop-blur-lg rounded-xl p-4 border border-blue-500/20"
+                className={`block bg-gray-800/50 backdrop-blur-lg rounded-xl p-4 border border-blue-500/20 hover:border-cyan-400/40 transition-all ${cert.link ? 'cursor-pointer' : 'cursor-default'
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -159,9 +193,14 @@ const Education = () => {
                       <p className="text-cyan-300 text-xs">{cert.issuer}</p>
                     </div>
                   </div>
-                  <span className="text-gray-400 text-xs">{cert.year}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-gray-400 text-xs">{cert.year}</span>
+                    {cert.link && (
+                      <ArrowTopRightOnSquareIcon className="w-4 h-4 text-cyan-400 hover:text-cyan-300" />
+                    )}
+                  </div>
                 </div>
-              </motion.div>
+              </CardWrapper>
             );
           })}
         </div>
